@@ -1,0 +1,186 @@
+-- Configurații pentru locația Blox Fruits Gacha
+local BLOX_FRUITS_GACHA_POSITION = Vector3.new(1234, 56, 789) -- Înlocuiește cu coordonatele exacte din joc
+
+-- Set up the player's GUI
+local player = game.Players.LocalPlayer
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+-- Crearea GUI principal
+local tpGui = Instance.new("Frame")
+tpGui.Size = UDim2.new(0, 300, 0, 650)  -- Am crescut dimensiunea pentru a încapă toate butoanele
+tpGui.Position = UDim2.new(0.5, -150, 0.5, -325)
+tpGui.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+tpGui.Visible = false
+tpGui.Parent = screenGui
+
+-- Funcție pentru adăugarea unui colț rotunjit la elementele GUI
+local function addCornerRadius(guiElement)
+    local uiCorner = Instance.new("UICorner")
+    uiCorner.CornerRadius = UDim.new(0, 10)
+    uiCorner.Parent = guiElement
+end
+
+addCornerRadius(tpGui)
+
+-- Funcție pentru crearea butoanelor
+local function createButton(parent, text, position, color, callback)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0, 200, 0, 50)
+    button.Position = position
+    button.Text = text
+    button.BackgroundColor3 = color
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Font = Enum.Font.SourceSans
+    button.TextSize = 24
+    button.Parent = parent
+    addCornerRadius(button)
+    button.MouseButton1Click:Connect(callback)
+end
+
+-- Funcție pentru teleportarea la Blox Fruits Gacha
+local function teleportToBloxFruitsGacha()
+    local character = player.Character
+    if character then
+        local rootPart = character:FindFirstChild("HumanoidRootPart")
+        if rootPart then
+            rootPart.CFrame = CFrame.new(BLOX_FRUITS_GACHA_POSITION)
+            print("Teleported to Blox Fruits Gacha!")
+        else
+            print("Error: HumanoidRootPart not found.")
+        end
+    else
+        print("Error: Character not found.")
+    end
+end
+
+-- Funcție pentru reîncărcarea jocului
+local function rejoinGame()
+    local gameId = game.PlaceId
+    game:GetService("TeleportService"):Teleport(gameId, player)
+end
+
+-- Funcție pentru creșterea puterii de salt
+local function increaseJumpPower()
+    local character = player.Character
+    if character then
+        local humanoid = character:FindFirstChild("Humanoid")
+        if humanoid then
+            local originalJumpPower = humanoid.JumpPower
+            humanoid.JumpPower = originalJumpPower * 9  -- Modificat de la 15 la 9
+            print("Jump power increased! It will last for 2 hours.")
+            wait(2 * 60 * 60)  -- Așteaptă 2 ore
+            humanoid.JumpPower = originalJumpPower
+            print("Jump power reverted back to normal.")
+        else
+            print("Error: Humanoid not found.")
+        end
+    else
+        print("Error: Character not found.")
+    end
+end
+
+-- Funcția pentru închiderea tuturor GUI-urilor
+local function closeAllGui()
+    tpGui.Visible = false
+    screenGui.Visible = false
+    print("All GUIs closed!")
+end
+
+-- Funcția pentru închiderea ZeeHUB
+local function closeZeeHUB()
+    screenGui:Destroy()
+    print("ZeeHUB closed!")
+end
+
+-- Funcție pentru activarea X-ray
+local function activateXRay()
+    for _, playerInstance in pairs(game.Players:GetPlayers()) do
+        if playerInstance ~= player then
+            local character = playerInstance.Character
+            if character and character:FindFirstChild("HumanoidRootPart") then
+                local marker = character:FindFirstChild("XRayMarker")
+                if not marker then
+                    marker = Instance.new("Part")
+                    marker.Name = "XRayMarker"
+                    marker.Size = Vector3.new(10, 10, 10) -- Cerc mai mic
+                    marker.Shape = Enum.PartType.Ball
+                    marker.Material = Enum.Material.Neon
+                    marker.BrickColor = BrickColor.new("Bright blue")
+                    marker.Anchored = true
+                    marker.CanCollide = false
+                    marker.Parent = character
+                end
+                marker.CFrame = character.HumanoidRootPart.CFrame
+                marker.Transparency = 0.3
+
+                -- Actualizează poziția la fiecare 0.1 secunde
+                game:GetService("RunService").RenderStepped:Connect(function()
+                    if marker and character:FindFirstChild("HumanoidRootPart") then
+                        marker.CFrame = character.HumanoidRootPart.CFrame
+                    end
+                end)
+            end
+        end
+    end
+    print("X-ray activated!")
+end
+
+-- Crearea butoanelor pentru funcționalități
+createButton(tpGui, "TP to Blox Fruits Gacha", UDim2.new(0.5, -100, 0.1, 0), Color3.fromRGB(0, 120, 255), teleportToBloxFruitsGacha)
+createButton(tpGui, "Rejoin Game", UDim2.new(0.5, -100, 0.2, 0), Color3.fromRGB(255, 165, 0), rejoinGame)
+createButton(tpGui, "Jump 9x", UDim2.new(0.5, -100, 0.3, 0), Color3.fromRGB(128, 0, 128), increaseJumpPower)
+createButton(tpGui, "X-ray", UDim2.new(0.5, -100, 0.4, 0), Color3.fromRGB(255, 69, 0), activateXRay)
+
+-- Creare buton ZeeHUB🎭
+local rainbowTextButton = Instance.new("TextButton")
+rainbowTextButton.Size = UDim2.new(0, 200, 0, 50)
+rainbowTextButton.Position = UDim2.new(1, -210, 1, -60)
+rainbowTextButton.Text = "ZeeHUB🎭"
+rainbowTextButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+rainbowTextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+rainbowTextButton.Font = Enum.Font.SourceSansBold
+rainbowTextButton.TextSize = 30
+rainbowTextButton.Parent = screenGui
+
+-- Creare buton X roșu pentru închiderea ZeeHUB
+local closeZeeHUBButton = Instance.new("TextButton")
+closeZeeHUBButton.Size = UDim2.new(0, 30, 0, 30)
+closeZeeHUBButton.Position = UDim2.new(1, -40, 1, -90)  -- Schimbăm poziția pentru a-l pune mai jos pe ecran
+closeZeeHUBButton.Text = "X"
+closeZeeHUBButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+closeZeeHUBButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeZeeHUBButton.Font = Enum.Font.SourceSansBold
+closeZeeHUBButton.TextSize = 24
+closeZeeHUBButton.Parent = screenGui
+
+-- Funcția de închidere a ZeeHUB și eliminare a butonului Lose
+closeZeeHUBButton.MouseButton1Click:Connect(function()
+    closeZeeHUB()
+    tpGui.Visible = false  -- Închide și GUI-ul de teleportare
+end)
+
+rainbowTextButton.MouseButton1Click:Connect(function()
+    tpGui.Visible = not tpGui.Visible
+end)
+
+-- Efect de curcubeu pentru butonul ZeeHUB🎭
+local function rainbowEffect()
+    while true do
+        for _, color in ipairs({
+            Color3.fromRGB(255, 0, 0),
+            Color3.fromRGB(255, 165, 0),
+            Color3.fromRGB(255, 255, 0),
+            Color3.fromRGB(0, 255, 0),
+            Color3.fromRGB(0, 0, 255),
+            Color3.fromRGB(75, 0, 130),
+            Color3.fromRGB(238, 130, 238)
+        }) do
+            rainbowTextButton.BackgroundColor3 = color
+            wait(0.5)
+        end
+    end
+end
+
+-- Rulează efectul de curcubeu într-un coroutine
+coroutine.wrap(rainbowEffect)()  
