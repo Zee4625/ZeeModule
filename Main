@@ -254,6 +254,13 @@ rainbowTextButton.Font = Enum.Font.SourceSansBold
 rainbowTextButton.TextSize = 30
 rainbowTextButton.Parent = screenGui
 
+-- Adăugăm imaginea la stânga butonului ZeeHUB🎭 și o facem mai mare
+local imageLabel = Instance.new("ImageLabel")
+imageLabel.Size = UDim2.new(0, 50, 0, 50)  -- Am mărit dimensiunea imaginii
+imageLabel.Position = UDim2.new(1, -260, 1, -60)  -- Locație la stânga butonului
+imageLabel.Image = "rbxassetid://98800539245561"
+imageLabel.Parent = screenGui
+
 -- Creare buton X roșu pentru închiderea ZeeHUB
 local closeZeeHUBButton = Instance.new("TextButton")
 closeZeeHUBButton.Size = UDim2.new(0, 30, 0, 30)
@@ -275,24 +282,16 @@ rainbowTextButton.MouseButton1Click:Connect(function()
     tpGui.Visible = not tpGui.Visible
 end)
 
--- Efect de curcubeu pentru butonul ZeeHUB🎭
-local function rainbowEffect()
+-- Efect de curcubeu pentru butonul ZeeHUB
+local function startRainbowText()
     while true do
-        for _, color in ipairs({
-            Color3.fromRGB(255, 0, 0),
-            Color3.fromRGB(255, 165, 0),
-            Color3.fromRGB(255, 255, 0),
-            Color3.fromRGB(0, 255, 0),
-            Color3.fromRGB(0, 0, 255),
-            Color3.fromRGB(75, 0, 130),
-            Color3.fromRGB(238, 130, 238)
-        }) do
-            rainbowTextButton.BackgroundColor3 = color
-            wait(0.5)
+        for i = 0, 255, 5 do
+            rainbowTextButton.TextColor3 = Color3.fromRGB(i, 0, 255 - i)
+            wait(0.05)
         end
     end
 end
 
--- Rulează efectul de curcubeu într-un coroutine
-coroutine.wrap(rainbowEffect)()
+startRainbowText()
+
 
