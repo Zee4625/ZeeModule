@@ -205,6 +205,44 @@ createButton(tpGui, "Aim Stop", UDim2.new(0.5, -100, 0.6, 0), Color3.fromRGB(255
     stopAimbot()
 end)
 
+-- Crearea butonului pentru Wall Hack
+local wallHackEnabled = false
+
+local function toggleWallHack()
+    local character = player.Character
+    if character then
+        local humanoid = character:FindFirstChild("Humanoid")
+        if humanoid then
+            -- Modificăm setările coliziunilor
+            if wallHackEnabled then
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics, true)
+                for _, part in pairs(character:GetChildren()) do
+                    if part:IsA("BasePart") then
+                        part.CanCollide = true
+                    end
+                end
+                print("Wall Hack Disabled!")
+                wallHackEnabled = false
+            else
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics, false)
+                for _, part in pairs(character:GetChildren()) do
+                    if part:IsA("BasePart") then
+                        part.CanCollide = false
+                    end
+                end
+                print("Wall Hack Enabled!")
+                wallHackEnabled = true
+            end
+        else
+            print("Error: Humanoid not found.")
+        end
+    else
+        print("Error: Character not found.")
+    end
+end
+
+createButton(tpGui, "Toggle Wall Hack", UDim2.new(0.5, -100, 0.7, 0), Color3.fromRGB(0, 255, 255), toggleWallHack)
+
 -- Creare buton ZeeHUB🎭
 local rainbowTextButton = Instance.new("TextButton")
 rainbowTextButton.Size = UDim2.new(0, 200, 0, 50)
@@ -237,7 +275,7 @@ rainbowTextButton.MouseButton1Click:Connect(function()
     tpGui.Visible = not tpGui.Visible
 end)
 
--- Efect de curcubeu pentru butonul ZeeHUB🎭 posibil rmove la sisitem dar aia e 
+-- Efect de curcubeu pentru butonul ZeeHUB🎭
 local function rainbowEffect()
     while true do
         for _, color in ipairs({
@@ -257,3 +295,4 @@ end
 
 -- Rulează efectul de curcubeu într-un coroutine
 coroutine.wrap(rainbowEffect)()
+
