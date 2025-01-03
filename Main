@@ -93,37 +93,99 @@ local function closeZeeHUB()
     print("ZeeHUB closed!")
 end
 
--- Funcție pentru activarea X-ray
+-- Funcție pentru activarea X-ray cu highlight roșu neon și text redus
 local function activateXRay()
-    for _, playerInstance in pairs(game.Players:GetPlayers()) do
-        if playerInstance ~= player then
-            local character = playerInstance.Character
-            if character and character:FindFirstChild("HumanoidRootPart") then
-                local marker = character:FindFirstChild("XRayMarker")
-                if not marker then
-                    marker = Instance.new("Part")
-                    marker.Name = "XRayMarker"
-                    marker.Size = Vector3.new(10, 10, 10) -- Cerc mai mic
-                    marker.Shape = Enum.PartType.Ball
-                    marker.Material = Enum.Material.Neon
-                    marker.BrickColor = BrickColor.new("Bright blue")
-                    marker.Anchored = true
-                    marker.CanCollide = false
-                    marker.Parent = character
-                end
-                marker.CFrame = character.HumanoidRootPart.CFrame
-                marker.Transparency = 0.3
-
-                -- Actualizează poziția la fiecare 0.1 secunde
-                game:GetService("RunService").RenderStepped:Connect(function()
-                    if marker and character:FindFirstChild("HumanoidRootPart") then
-                        marker.CFrame = character.HumanoidRootPart.CFrame
+    while true do
+        for _, playerInstance in pairs(game.Players:GetPlayers()) do
+            if playerInstance ~= player then
+                local character = playerInstance.Character
+                if character and character:FindFirstChild("HumanoidRootPart") then
+                    -- Highlight player
+                    local highlight = character:FindFirstChild("PlayerHighlight")
+                    if not highlight then
+                        highlight = Instance.new("Highlight")
+                        highlight.Name = "PlayerHighlight"
+                        highlight.FillColor = Color3.fromRGB(255, 0, 0) -- Roșu neon
+                        highlight.FillTransparency = 0.3
+                        highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+                        highlight.OutlineTransparency = 0
+                        highlight.Parent = character
                     end
-                end)
+
+                    -- Text label above the player
+                    local labelBillboard = character:FindFirstChild("NameBillboard")
+                    if not labelBillboard then
+                        labelBillboard = Instance.new("BillboardGui")
+                        labelBillboard.Name = "NameBillboard"
+                        labelBillboard.Size = UDim2.new(0, 150, 0, 25) -- Dimensiune mai mică
+                        labelBillboard.StudsOffset = Vector3.new(0, 3, 0) -- Deasupra capului
+                        labelBillboard.AlwaysOnTop = true
+                        labelBillboard.Parent = character
+
+                        local textLabel = Instance.new("TextLabel")
+                        textLabel.Size = UDim2.new(1, 0, 1, 0)
+                        textLabel.BackgroundTransparency = 1
+                        textLabel.Text = playerInstance.Name
+                        textLabel.TextColor3 = Color3.fromRGB(255, 0, 0) -- Roșu
+                        textLabel.Font = Enum.Font.SourceSansBold
+                        textLabel.TextScaled = true
+                        textLabel.TextSize = 14 -- Dimensiune text mai mică
+                        textLabel.Parent = labelBillboard
+                    end
+                end
             end
         end
+        wait(5)  -- Așteaptă 5 secunde pentru a reîncărca X-ray
     end
-    print("X-ray activated!")
+end
+
+-- Funcție pentru a pune cursorul pe torsoul R15 al celui mai apropiat jucător
+local aimingEnabled = false -- Flag pentru a opri/porni aimbotul
+
+local function aimAtClosestPlayer()
+    while aimingEnabled do  -- Actualizare continuă doar dacă aimingEnabled este adevărat
+        wait(0.0004)  -- Actualizare la fiecare 0.0004 secunde
+        local closestPlayer = nil
+        local shortestDistance = math.huge
+        local playerPosition = player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Character.HumanoidRootPart.Position
+
+        -- Verificăm toți jucătorii pentru cel mai apropiat
+        if playerPosition then
+            for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+                if otherPlayer ~= player and otherPlayer.Character then
+                    local otherPlayerPosition = otherPlayer.Character:FindFirstChild("HumanoidRootPart")
+                    if otherPlayerPosition then
+                        local distance = (playerPosition - otherPlayerPosition.Position).Magnitude
+                        if distance < shortestDistance then
+                            closestPlayer = otherPlayer
+                            shortestDistance = distance
+                        end
+                    end
+                end
+            end
+        end
+
+        -- Dacă am găsit cel mai apropiat jucător, punem cursorul pe torsoul acestuia
+        if closestPlayer and closestPlayer.Character then
+            local torso = closestPlayer.Character:FindFirstChild("UpperTorso") or closestPlayer.Character:FindFirstChild("LowerTorso")
+            if torso then
+                -- Acesta este locul în care dorim să "punem" cursorul. 
+                -- Pentru un comportament de țintire, vom actualiza camera sau cursorul pentru a urmări torsoul.
+                game:GetService("UserInputService").MouseIconEnabled = false  -- Ascunde cursorul implicit
+                local camera = game.Workspace.CurrentCamera
+                camera.CFrame = CFrame.new(camera.CFrame.Position, torso.Position)  -- Camera se va orienta spre torsoul jucătorului
+                print("Aiming at " .. closestPlayer.Name)
+            end
+        else
+            print("No closest player found.")
+        end
+    end
+end
+
+-- Funcție pentru a opri aimbotul
+local function stopAimbot()
+    aimingEnabled = false
+    print("Aimbot stopped.")
 end
 
 -- Crearea butoanelor pentru funcționalități
@@ -131,6 +193,17 @@ createButton(tpGui, "TP to Blox Fruits Gacha", UDim2.new(0.5, -100, 0.1, 0), Col
 createButton(tpGui, "Rejoin Game", UDim2.new(0.5, -100, 0.2, 0), Color3.fromRGB(255, 165, 0), rejoinGame)
 createButton(tpGui, "Jump 9x", UDim2.new(0.5, -100, 0.3, 0), Color3.fromRGB(128, 0, 128), increaseJumpPower)
 createButton(tpGui, "X-ray", UDim2.new(0.5, -100, 0.4, 0), Color3.fromRGB(255, 69, 0), activateXRay)
+
+-- Creare buton pentru activarea/oprirea aimbotului
+createButton(tpGui, "Aim at Closest Player", UDim2.new(0.5, -100, 0.5, 0), Color3.fromRGB(0, 255, 0), function()
+    aimingEnabled = true
+    aimAtClosestPlayer()
+end)
+
+-- Creare buton pentru a opri aimbotul
+createButton(tpGui, "Aim Stop", UDim2.new(0.5, -100, 0.6, 0), Color3.fromRGB(255, 0, 0), function()
+    stopAimbot()
+end)
 
 -- Creare buton ZeeHUB🎭
 local rainbowTextButton = Instance.new("TextButton")
@@ -146,7 +219,7 @@ rainbowTextButton.Parent = screenGui
 -- Creare buton X roșu pentru închiderea ZeeHUB
 local closeZeeHUBButton = Instance.new("TextButton")
 closeZeeHUBButton.Size = UDim2.new(0, 30, 0, 30)
-closeZeeHUBButton.Position = UDim2.new(1, -40, 1, -90)  -- Schimbăm poziția pentru a-l pune mai jos pe ecran
+closeZeeHUBButton.Position = UDim2.new(1, -40, 1, -90)
 closeZeeHUBButton.Text = "X"
 closeZeeHUBButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 closeZeeHUBButton.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -154,17 +227,17 @@ closeZeeHUBButton.Font = Enum.Font.SourceSansBold
 closeZeeHUBButton.TextSize = 24
 closeZeeHUBButton.Parent = screenGui
 
--- Funcția de închidere a ZeeHUB și eliminare a butonului Lose
+-- Funcția de închidere a ZeeHUB și eliminare a butonului
 closeZeeHUBButton.MouseButton1Click:Connect(function()
     closeZeeHUB()
-    tpGui.Visible = false  -- Închide și GUI-ul de teleportare
+    tpGui.Visible = false
 end)
 
 rainbowTextButton.MouseButton1Click:Connect(function()
     tpGui.Visible = not tpGui.Visible
 end)
 
--- Efect de curcubeu pentru butonul ZeeHUB🎭
+-- Efect de curcubeu pentru butonul ZeeHUB🎭 posibil rmove la sisitem dar aia e 
 local function rainbowEffect()
     while true do
         for _, color in ipairs({
@@ -183,4 +256,4 @@ local function rainbowEffect()
 end
 
 -- Rulează efectul de curcubeu într-un coroutine
-coroutine.wrap(rainbowEffect)()  
+coroutine.wrap(rainbowEffect)()
