@@ -1,5 +1,5 @@
 -- Configurații pentru locația Blox Fruits Gacha
-local BLOX_FRUITS_GACHA_POSITION = Vector3.new(1234, 56, 789) -- Înlocuiește cu coordonatele exacte din joc
+local BLOX_FRUITS_GACHA_POSITION = Vector3.new(-12491.96, 336.96, -7449.78) -- Înlocuiește cu coordonatele exacte din joc
 
 -- Set up the player's GUI
 local player = game.Players.LocalPlayer
@@ -293,5 +293,3 @@ local function startRainbowText()
 end
 
 startRainbowText()
-
-
