@@ -93,7 +93,7 @@ local function closeZeeHUB()
     print("ZeeHUB closed!")
 end
 
--- Funcție pentru activarea X-ray cu highlight roșu neon și text redus
+-- Funcție pentru activarea X-ray cu highlight roșu neon
 local function activateXRay()
     while true do
         for _, playerInstance in pairs(game.Players:GetPlayers()) do
@@ -111,27 +111,6 @@ local function activateXRay()
                         highlight.OutlineTransparency = 0
                         highlight.Parent = character
                     end
-
-                    -- Text label above the player
-                    local labelBillboard = character:FindFirstChild("NameBillboard")
-                    if not labelBillboard then
-                        labelBillboard = Instance.new("BillboardGui")
-                        labelBillboard.Name = "NameBillboard"
-                        labelBillboard.Size = UDim2.new(0, 150, 0, 25) -- Dimensiune mai mică
-                        labelBillboard.StudsOffset = Vector3.new(0, 3, 0) -- Deasupra capului
-                        labelBillboard.AlwaysOnTop = true
-                        labelBillboard.Parent = character
-
-                        local textLabel = Instance.new("TextLabel")
-                        textLabel.Size = UDim2.new(1, 0, 1, 0)
-                        textLabel.BackgroundTransparency = 1
-                        textLabel.Text = playerInstance.Name
-                        textLabel.TextColor3 = Color3.fromRGB(255, 0, 0) -- Roșu
-                        textLabel.Font = Enum.Font.SourceSansBold
-                        textLabel.TextScaled = true
-                        textLabel.TextSize = 14 -- Dimensiune text mai mică
-                        textLabel.Parent = labelBillboard
-                    end
                 end
             end
         end
@@ -139,53 +118,54 @@ local function activateXRay()
     end
 end
 
--- Funcție pentru a pune cursorul pe torsoul R15 al celui mai apropiat jucător
-local aimingEnabled = false -- Flag pentru a opri/porni aimbotul
+-- Funcție pentru ESP fructe
+local function activateFruitESP()
+    while true do
+        for _, fruit in pairs(game.Workspace:GetDescendants()) do
+            if fruit:IsA("Model") and fruit.Name == "Fruit" then
+                local fruitBillboard = fruit:FindFirstChild("FruitBillboard")
+                if not fruitBillboard then
+                    fruitBillboard = Instance.new("BillboardGui")
+                    fruitBillboard.Name = "FruitBillboard"
+                    fruitBillboard.Size = UDim2.new(0, 200, 0, 70) -- Dimensiune ajustată pentru două texte
+                    fruitBillboard.StudsOffset = Vector3.new(0, 3, 0)
+                    fruitBillboard.AlwaysOnTop = true
+                    fruitBillboard.Parent = fruit
 
-local function aimAtClosestPlayer()
-    while aimingEnabled do  -- Actualizare continuă doar dacă aimingEnabled este adevărat
-        wait(0.0004)  -- Actualizare la fiecare 0.0004 secunde
-        local closestPlayer = nil
-        local shortestDistance = math.huge
-        local playerPosition = player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Character.HumanoidRootPart.Position
+                    -- Label principal pentru "Fruit"
+                    local textLabel = Instance.new("TextLabel")
+                    textLabel.Size = UDim2.new(1, 0, 0.5, 0)
+                    textLabel.Position = UDim2.new(0, 0, 0, 0)
+                    textLabel.BackgroundTransparency = 1
+                    textLabel.Text = "Fruit"
+                    textLabel.TextColor3 = Color3.fromRGB(0, 0, 255) -- Albastru neon
+                    textLabel.Font = Enum.Font.SourceSansBold
+                    textLabel.TextScaled = true
+                    textLabel.Parent = fruitBillboard
 
-        -- Verificăm toți jucătorii pentru cel mai apropiat
-        if playerPosition then
-            for _, otherPlayer in pairs(game.Players:GetPlayers()) do
-                if otherPlayer ~= player and otherPlayer.Character then
-                    local otherPlayerPosition = otherPlayer.Character:FindFirstChild("HumanoidRootPart")
-                    if otherPlayerPosition then
-                        local distance = (playerPosition - otherPlayerPosition.Position).Magnitude
-                        if distance < shortestDistance then
-                            closestPlayer = otherPlayer
-                            shortestDistance = distance
+                    -- Actualizare text pentru distanță
+                    local distanceLabel = Instance.new("TextLabel")
+                    distanceLabel.Size = UDim2.new(1, 0, 0.5, 0)
+                    distanceLabel.Position = UDim2.new(0, 0, 0.5, 0)
+                    distanceLabel.BackgroundTransparency = 1
+                    distanceLabel.TextColor3 = Color3.fromRGB(255, 255, 255) -- Alb
+                    distanceLabel.Font = Enum.Font.SourceSans
+                    distanceLabel.TextScaled = true
+                    distanceLabel.Parent = fruitBillboard
+
+                    -- Actualizare periodică a distanței
+                    spawn(function()
+                        while fruit.Parent do
+                            local distance = (player.Character.HumanoidRootPart.Position - fruit.Position).Magnitude
+                            distanceLabel.Text = string.format("%.0f meters away", distance)
+                            wait(1) -- Așteaptă 1 secundă înainte de a reîmprospăta
                         end
-                    end
+                    end)
                 end
             end
         end
-
-        -- Dacă am găsit cel mai apropiat jucător, punem cursorul pe torsoul acestuia
-        if closestPlayer and closestPlayer.Character then
-            local torso = closestPlayer.Character:FindFirstChild("UpperTorso") or closestPlayer.Character:FindFirstChild("LowerTorso")
-            if torso then
-                -- Acesta este locul în care dorim să "punem" cursorul. 
-                -- Pentru un comportament de țintire, vom actualiza camera sau cursorul pentru a urmări torsoul.
-                game:GetService("UserInputService").MouseIconEnabled = false  -- Ascunde cursorul implicit
-                local camera = game.Workspace.CurrentCamera
-                camera.CFrame = CFrame.new(camera.CFrame.Position, torso.Position)  -- Camera se va orienta spre torsoul jucătorului
-                print("Aiming at " .. closestPlayer.Name)
-            end
-        else
-            print("No closest player found.")
-        end
+        wait(420)  -- Refresh every 7 minutes (420 seconds)
     end
-end
-
--- Funcție pentru a opri aimbotul
-local function stopAimbot()
-    aimingEnabled = false
-    print("Aimbot stopped.")
 end
 
 -- Crearea butoanelor pentru funcționalități
@@ -194,16 +174,8 @@ createButton(tpGui, "Rejoin Game", UDim2.new(0.5, -100, 0.2, 0), Color3.fromRGB(
 createButton(tpGui, "Jump 9x", UDim2.new(0.5, -100, 0.3, 0), Color3.fromRGB(128, 0, 128), increaseJumpPower)
 createButton(tpGui, "X-ray", UDim2.new(0.5, -100, 0.4, 0), Color3.fromRGB(255, 69, 0), activateXRay)
 
--- Creare buton pentru activarea/oprirea aimbotului
-createButton(tpGui, "Aim at Closest Player", UDim2.new(0.5, -100, 0.5, 0), Color3.fromRGB(0, 255, 0), function()
-    aimingEnabled = true
-    aimAtClosestPlayer()
-end)
-
--- Creare buton pentru a opri aimbotul
-createButton(tpGui, "Aim Stop", UDim2.new(0.5, -100, 0.6, 0), Color3.fromRGB(255, 0, 0), function()
-    stopAimbot()
-end)
+-- Creare buton pentru Fruit ESP
+createButton(tpGui, "Fruit ESP", UDim2.new(0.5, -100, 0.5, 0), Color3.fromRGB(0, 0, 255), activateFruitESP)
 
 -- Crearea butonului pentru Wall Hack
 local wallHackEnabled = false
@@ -241,7 +213,7 @@ local function toggleWallHack()
     end
 end
 
-createButton(tpGui, "Toggle Wall Hack", UDim2.new(0.5, -100, 0.7, 0), Color3.fromRGB(0, 255, 255), toggleWallHack)
+createButton(tpGui, "Toggle Wall Hack", UDim2.new(0.5, -100, 0.6, 0), Color3.fromRGB(0, 255, 255), toggleWallHack)
 
 -- Creare buton ZeeHUB🎭
 local rainbowTextButton = Instance.new("TextButton")
