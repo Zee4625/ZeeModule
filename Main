@@ -93,7 +93,7 @@ local function closeZeeHUB()
     print("ZeeHUB closed!")
 end
 
--- Funcție pentru activarea X-ray cu highlight roșu neon
+-- Funcție pentru activarea X-ray cu highlight roșu neon și numele jucătorului
 local function activateXRay()
     while true do
         for _, playerInstance in pairs(game.Players:GetPlayers()) do
@@ -111,6 +111,29 @@ local function activateXRay()
                         highlight.OutlineTransparency = 0
                         highlight.Parent = character
                     end
+
+                    -- Crearea unui label pentru numele jucătorului
+                    local nameLabel = character:FindFirstChild("NameLabel")
+                    if not nameLabel then
+                        nameLabel = Instance.new("BillboardGui")
+                        nameLabel.Name = "NameLabel"
+                        nameLabel.Size = UDim2.new(0, 100, 0, 30) -- Dimensiune mai mică pentru label
+                        nameLabel.StudsOffset = Vector3.new(0, 3, 0)
+                        nameLabel.AlwaysOnTop = true
+                        nameLabel.Parent = character
+
+                        -- Textul cu numele jucătorului
+                        local textLabel = Instance.new("TextLabel")
+                        textLabel.Size = UDim2.new(1, 0, 1, 0)
+                        textLabel.Position = UDim2.new(0, 0, 0, 0)
+                        textLabel.BackgroundTransparency = 1
+                        textLabel.Text = playerInstance.Name
+                        textLabel.TextColor3 = Color3.fromRGB(255, 0, 0) -- Roșu neon
+                        textLabel.Font = Enum.Font.SourceSansBold
+                        textLabel.TextSize = 14 -- Dimensiune mai mică pentru text
+                        textLabel.TextScaled = true
+                        textLabel.Parent = nameLabel
+                    end
                 end
             end
         end
@@ -127,29 +150,31 @@ local function activateFruitESP()
                 if not fruitBillboard then
                     fruitBillboard = Instance.new("BillboardGui")
                     fruitBillboard.Name = "FruitBillboard"
-                    fruitBillboard.Size = UDim2.new(0, 200, 0, 70) -- Dimensiune ajustată pentru două texte
+                    fruitBillboard.Size = UDim2.new(0, 100, 0, 30) -- Dimensiune mai mică pentru label
                     fruitBillboard.StudsOffset = Vector3.new(0, 3, 0)
                     fruitBillboard.AlwaysOnTop = true
                     fruitBillboard.Parent = fruit
 
                     -- Label principal pentru "Fruit"
                     local textLabel = Instance.new("TextLabel")
-                    textLabel.Size = UDim2.new(1, 0, 0.5, 0)
+                    textLabel.Size = UDim2.new(1, 0, 1, 0)
                     textLabel.Position = UDim2.new(0, 0, 0, 0)
                     textLabel.BackgroundTransparency = 1
                     textLabel.Text = "Fruit"
                     textLabel.TextColor3 = Color3.fromRGB(0, 0, 255) -- Albastru neon
                     textLabel.Font = Enum.Font.SourceSansBold
+                    textLabel.TextSize = 12 -- Dimensiune mai mică pentru text
                     textLabel.TextScaled = true
                     textLabel.Parent = fruitBillboard
 
                     -- Actualizare text pentru distanță
                     local distanceLabel = Instance.new("TextLabel")
-                    distanceLabel.Size = UDim2.new(1, 0, 0.5, 0)
-                    distanceLabel.Position = UDim2.new(0, 0, 0.5, 0)
+                    distanceLabel.Size = UDim2.new(1, 0, 1, 0)
+                    distanceLabel.Position = UDim2.new(0, 0, 0, 20)
                     distanceLabel.BackgroundTransparency = 1
                     distanceLabel.TextColor3 = Color3.fromRGB(255, 255, 255) -- Alb
                     distanceLabel.Font = Enum.Font.SourceSans
+                    distanceLabel.TextSize = 12 -- Dimensiune mai mică pentru text
                     distanceLabel.TextScaled = true
                     distanceLabel.Parent = fruitBillboard
 
@@ -265,3 +290,4 @@ local function startRainbowText()
 end
 
 startRainbowText()
+
