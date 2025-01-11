@@ -205,18 +205,83 @@ local function activateFruitESP()
                 end
             end
         end
-        wait(440)  -- Refresh every 7 minutes (420 seconds)
+        wait(510)  -- Refresh every 7 minutes (420 seconds)
     end
 end
 
 -- Crearea butoanelor pentru funcționalități
 createButton(tpGui, "TP Gacha", UDim2.new(0.5, -100, 0.6, 0), Color3.fromRGB(0, 120, 255), teleportToBloxFruitsGacha)
-createButton(tpGui, "Rejoin Game", UDim2.new(0.5, -100, 0.7, 0), Color3.fromRGB(255, 165, 0), rejoinGame)
+createButton(tpGui, "Rejoin Game", UDim2.new(0.5, -100, 0.8, 0), Color3.fromRGB(255, 165, 0), rejoinGame)
 createButton(tpGui, "Jump 9x", UDim2.new(0.5, -100, 0.3, 0), Color3.fromRGB(128, 0, 128), increaseJumpPower)
 createButton(tpGui, "X-ray", UDim2.new(0.5, -100, 0.1, 0), Color3.fromRGB(255, 69, 0), activateXRay)
 createButton(tpGui, "TP to tiki", UDim2.new(0.5, -100, 0.5, 0), Color3.fromRGB(0, 120, 255), teleportTotiki)
 -- Creare buton pentru Fruit ESP
 createButton(tpGui, "Fruit ESP", UDim2.new(0.5, -100, 0.2, 0), Color3.fromRGB(0, 0, 255), activateFruitESP)
+
+-- Funcția pentru deschiderea tabelului de jucători
+local function openSpyTable()
+    local spyFrame = Instance.new("Frame")
+    spyFrame.Size = UDim2.new(0, 300, 0, 400) -- Dimensiunea tabelului
+    spyFrame.Position = UDim2.new(0.5, -150, 0.5, -200) -- Centrare
+    spyFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50) -- Fundal gri
+    spyFrame.Visible = true
+    spyFrame.Parent = screenGui
+    addCornerRadius(spyFrame)
+
+    local scrollFrame = Instance.new("ScrollingFrame")
+    scrollFrame.Size = UDim2.new(1, 0, 1, 0)
+    scrollFrame.CanvasSize = UDim2.new(0, 0, 2, 0) -- Ajustabil pentru mulți jucători
+    scrollFrame.Parent = spyFrame
+
+    -- Adăugare butoane pentru fiecare jucător
+    for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+        if otherPlayer ~= player then
+            local playerButton = Instance.new("TextButton")
+            playerButton.Size = UDim2.new(1, -10, 0, 50)
+            playerButton.Position = UDim2.new(0, 5, 0, (#scrollFrame:GetChildren() - 1) * 60)
+            playerButton.Text = otherPlayer.Name
+            playerButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+            playerButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+            playerButton.Font = Enum.Font.SourceSansBold
+            playerButton.TextSize = 18
+            playerButton.Parent = scrollFrame
+            addCornerRadius(playerButton)
+
+            -- Funcție pentru schimbarea perspectivei
+            playerButton.MouseButton1Click:Connect(function()
+                local targetCharacter = otherPlayer.Character
+                if targetCharacter and targetCharacter:FindFirstChild("HumanoidRootPart") then
+                    local camera = game.Workspace.CurrentCamera
+                    camera.CameraSubject = targetCharacter.Humanoid
+                    camera.CFrame = targetCharacter.HumanoidRootPart.CFrame
+                    print("Now viewing from " .. otherPlayer.Name .. "'s perspective.")
+                else
+                    print("Error: Could not find target player's character.")
+                end
+            end)
+        end
+    end
+
+    -- Buton pentru închiderea tabelului
+    local closeButton = Instance.new("TextButton")
+    closeButton.Size = UDim2.new(0, 100, 0, 30)
+    closeButton.Position = UDim2.new(0.5, -50, 1, -40)
+    closeButton.Text = "Close"
+    closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    closeButton.Font = Enum.Font.SourceSansBold
+    closeButton.TextSize = 18
+    closeButton.Parent = spyFrame
+    addCornerRadius(closeButton)
+
+    closeButton.MouseButton1Click:Connect(function()
+        spyFrame:Destroy()
+    end)
+end
+
+-- Înlocuire funcționalitate buton "Spy"
+createButton(tpGui, "Spy", UDim2.new(0.5, -100, 0.7, 0), Color3.fromRGB(0, 255, 0), openSpyTable)
+
 
 -- Crearea butonului pentru Wall Hack
 local wallHackEnabled = false
