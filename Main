@@ -1,6 +1,6 @@
 -- Configurații pentru locația Blox Fruits Gacha
 local BLOX_FRUITS_GACHA_POSITION = Vector3.new(-12491.96, 336.96, -7449.78) -- Înlocuiește cu coordonatele exacte din joc
-
+local tiki = Vector3.new(-16215.10, 9.10, 439.19) -- -16215.10 9.10 439.19
 -- Set up the player's GUI
 local player = game.Players.LocalPlayer
 local screenGui = Instance.new("ScreenGui")
@@ -45,6 +45,22 @@ local function teleportToBloxFruitsGacha()
         local rootPart = character:FindFirstChild("HumanoidRootPart")
         if rootPart then
             rootPart.CFrame = CFrame.new(BLOX_FRUITS_GACHA_POSITION)
+            print("Teleported to Blox Fruits Gacha!")
+        else
+            print("Error: HumanoidRootPart not found.")
+        end
+    else
+        print("Error: Character not found.")
+    end
+end
+
+-- Funcție pentru teleportarea la Tiki
+local function teleportTotiki()
+    local character = player.Character
+    if character then
+        local rootPart = character:FindFirstChild("HumanoidRootPart")
+        if rootPart then
+            rootPart.CFrame = CFrame.new(tiki)
             print("Teleported to Blox Fruits Gacha!")
         else
             print("Error: HumanoidRootPart not found.")
@@ -189,18 +205,18 @@ local function activateFruitESP()
                 end
             end
         end
-        wait(420)  -- Refresh every 7 minutes (420 seconds)
+        wait(440)  -- Refresh every 7 minutes (420 seconds)
     end
 end
 
 -- Crearea butoanelor pentru funcționalități
-createButton(tpGui, "TP to Blox Fruits Gacha", UDim2.new(0.5, -100, 0.1, 0), Color3.fromRGB(0, 120, 255), teleportToBloxFruitsGacha)
-createButton(tpGui, "Rejoin Game", UDim2.new(0.5, -100, 0.2, 0), Color3.fromRGB(255, 165, 0), rejoinGame)
+createButton(tpGui, "TP Gacha", UDim2.new(0.5, -100, 0.6, 0), Color3.fromRGB(0, 120, 255), teleportToBloxFruitsGacha)
+createButton(tpGui, "Rejoin Game", UDim2.new(0.5, -100, 0.7, 0), Color3.fromRGB(255, 165, 0), rejoinGame)
 createButton(tpGui, "Jump 9x", UDim2.new(0.5, -100, 0.3, 0), Color3.fromRGB(128, 0, 128), increaseJumpPower)
-createButton(tpGui, "X-ray", UDim2.new(0.5, -100, 0.4, 0), Color3.fromRGB(255, 69, 0), activateXRay)
-
+createButton(tpGui, "X-ray", UDim2.new(0.5, -100, 0.1, 0), Color3.fromRGB(255, 69, 0), activateXRay)
+createButton(tpGui, "TP to tiki", UDim2.new(0.5, -100, 0.5, 0), Color3.fromRGB(0, 120, 255), teleportTotiki)
 -- Creare buton pentru Fruit ESP
-createButton(tpGui, "Fruit ESP", UDim2.new(0.5, -100, 0.5, 0), Color3.fromRGB(0, 0, 255), activateFruitESP)
+createButton(tpGui, "Fruit ESP", UDim2.new(0.5, -100, 0.2, 0), Color3.fromRGB(0, 0, 255), activateFruitESP)
 
 -- Crearea butonului pentru Wall Hack
 local wallHackEnabled = false
@@ -238,7 +254,7 @@ local function toggleWallHack()
     end
 end
 
-createButton(tpGui, "Toggle Wall Hack", UDim2.new(0.5, -100, 0.6, 0), Color3.fromRGB(0, 255, 255), toggleWallHack)
+createButton(tpGui, "Toggle Wall Hack", UDim2.new(0.5, -100, 0.4, 0), Color3.fromRGB(0, 255, 255), toggleWallHack)
 
 -- Creare buton ZeeHUB🎭
 local rainbowTextButton = Instance.new("TextButton")
@@ -290,4 +306,3 @@ local function startRainbowText()
 end
 
 startRainbowText()
-
