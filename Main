@@ -83,7 +83,7 @@ local function increaseJumpPower()
         local humanoid = character:FindFirstChild("Humanoid")
         if humanoid then
             local originalJumpPower = humanoid.JumpPower
-            humanoid.JumpPower = originalJumpPower * 9  -- Modificat de la 15 la 9
+            humanoid.JumpPower = originalJumpPower * 5  -- Modificat de la 15 la 9
             print("Jump power increased! It will last for 2 hours.")
             wait(2 * 60 * 60)  -- Așteaptă 2 ore
             humanoid.JumpPower = originalJumpPower
@@ -212,7 +212,7 @@ end
 -- Crearea butoanelor pentru funcționalități
 createButton(tpGui, "TP Gacha", UDim2.new(0.5, -100, 0.6, 0), Color3.fromRGB(0, 120, 255), teleportToBloxFruitsGacha)
 createButton(tpGui, "Rejoin Game", UDim2.new(0.5, -100, 0.8, 0), Color3.fromRGB(255, 165, 0), rejoinGame)
-createButton(tpGui, "Jump 9x", UDim2.new(0.5, -100, 0.3, 0), Color3.fromRGB(128, 0, 128), increaseJumpPower)
+createButton(tpGui, "Jump 5x", UDim2.new(0.5, -100, 0.3, 0), Color3.fromRGB(128, 0, 128), increaseJumpPower)
 createButton(tpGui, "X-ray", UDim2.new(0.5, -100, 0.1, 0), Color3.fromRGB(255, 69, 0), activateXRay)
 createButton(tpGui, "TP to tiki", UDim2.new(0.5, -100, 0.5, 0), Color3.fromRGB(0, 120, 255), teleportTotiki)
 -- Creare buton pentru Fruit ESP
