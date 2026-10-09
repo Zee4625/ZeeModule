@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="green">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#010409"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Zack Engine · Radars</title>
+<script>try{var s=JSON.parse(localStorage.getItem('zack.settings')||'{}');if(s.theme)document.documentElement.dataset.theme=s.theme;if(s.fz)document.documentElement.style.fontSize=s.fz+'px'}catch(e){}</script>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="zack.css">
+</head>
+<body data-page="radar">
+<main id="app">
+<section class="win">
+<div class="wt"><b>Radars</b><span class="sm" style="opacity:.85">phones · Wi-Fi link · appliances · cameras · audio · wearables · hardware</span></div>
+<div id="tRadar" class="flex flex-col gap-2">
+  <div class="box"><div class="ttl"><span>Radars</span><span id="mrSt" style="color:var(--c)">IDLE</span></div><div id="mrChips" class="flex flex-wrap gap-1"></div></div>
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-2">
+    <div class="lg:col-span-7 box"><canvas id="mrC" class="w-full bg-black rounded" style="height:56vh;min-height:300px;border:1px solid rgba(var(--cr),.3)"></canvas>
+      <div id="mrClosest" class="sm mt-2"></div>
+      <div id="mrCtl" class="flex flex-wrap gap-2 mt-2"><button class="b" onclick="btAdd()">ADD DEVICE (BLUETOOTH)</button><button class="b" onclick="mrDemo()">DEMO</button><button class="b" onclick="mrInspect(mrClosest())">INSPECT CLOSEST</button><button class="b k" onclick="mrClear()">CLEAR</button></div>
+      <div id="mrNote" class="sm mt-2" style="opacity:.9"></div></div>
+    <div class="lg:col-span-5 flex flex-col gap-2">
+      <div id="mrBoxDev" class="box"><div class="ttl"><span>Devices</span><span id="mrCnt" style="color:var(--c)">0</span></div><div id="mrList" class="sm flex flex-col gap-1" style="max-height:30vh;overflow:auto"></div></div>
+      <div id="mrBoxWifi" class="box" style="display:none"><div class="ttl"><span>Your connection (real data)</span><span id="mwQ" style="color:var(--c)">--</span></div><div id="mwT" class="sm flex flex-col gap-1"></div>
+        <div class="sm mt-2" style="opacity:.9">Browsers cannot list nearby Wi-Fi networks, their names or their signal strength; that needs a native app. This radar plots your real connection: each point is a ping to the server hosting this page (distance from the centre = latency, red marks = lost packets).</div></div>
+      <div id="mrBoxEmf" class="box" style="display:none"><div class="ttl"><span>Electrical activity (real sensors)</span><span id="emfSt" style="color:var(--c)">OFF</span></div>
+        <div class="flex items-end justify-between"><div><div class="sm">MAGNETIC FIELD</div><div id="emfV" class="text-2xl font-bold glow">--</div></div><div id="emfLvl" class="sm text-right">--</div></div>
+        <canvas id="emfC" class="w-full mt-1 bg-black rounded" style="height:46px;border:1px solid rgba(var(--gr),.3)"></canvas>
+        <div class="flex gap-2 mt-1"><button class="b" id="emfBtn" onclick="emfToggle()">START EMF SENSOR</button></div>
+        <div class="flex items-end justify-between mt-3"><div><div class="sm">MAINS HUM (MICROPHONE)</div><div id="humV" class="text-2xl font-bold glow">--</div></div><div id="humLvl" class="sm text-right">--</div></div>
+        <canvas id="humC" class="w-full mt-1 bg-black rounded" style="height:56px;border:1px solid rgba(var(--gr),.3)"></canvas>
+        <div class="flex gap-2 mt-1"><button class="b" id="humBtn" onclick="humToggle()">START HUM DETECTOR</button></div>
+        <div class="sm mt-2" style="opacity:.9">The phone magnetometer (Chrome on Android) measures the magnetic field in microtesla; motors, transformers, magnets and mains cables raise it. The hum detector listens through the microphone for 50/60 Hz mains buzz. Both are indicators only: they cannot tell which appliance it is.</div></div>
+      <div id="mrBoxHw" class="box" style="display:none"><div class="ttl"><span>Hardware on this device</span><span id="hwCnt" style="color:var(--c)">0</span></div>
+        <div class="flex flex-wrap gap-2 mb-1"><button class="b" onclick="camScan()">SCAN CAMERAS / MICS</button><button class="b" onclick="midiScan()">SCAN MIDI</button><button class="b" onclick="usbAdd()">ADD USB DEVICE</button></div>
+        <div id="hwList" class="sm flex flex-col gap-1" style="max-height:30vh;overflow:auto"></div></div>
+      <div class="box"><div class="ttl"><span>Inspect</span><span id="mrIn" style="color:var(--c)">--</span></div><div id="mrDet" class="sm flex flex-col gap-1">Press INSPECT on a device.</div></div>
+    </div>
+  </div>
+</div>
+</section>
+</main>
+<script src="zack.js"></script>
+<script src="radar.js"></script>
+</body>
+</html>

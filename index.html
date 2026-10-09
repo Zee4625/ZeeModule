@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="green">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#010409"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Zack Engine · Dashboard</title>
+<script>try{var s=JSON.parse(localStorage.getItem('zack.settings')||'{}');if(s.theme)document.documentElement.dataset.theme=s.theme;if(s.fz)document.documentElement.style.fontSize=s.fz+'px'}catch(e){}</script>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="zack.css">
+</head>
+<body data-page="index">
+<main id="app">
+<section class="win">
+<div class="wt"><b>Dashboard</b><span class="sm" style="opacity:.85">Zack Engine SYS v11 · system overview</span></div>
+<div id="tDash" class="grid grid-cols-1 lg:grid-cols-12 gap-2">
+  <div class="lg:col-span-3 flex flex-col gap-2">
+    <div class="box"><div class="ttl" style="color:var(--c)"><span>xOy Tracker</span><span>LIVE</span></div>
+      <div class="grid grid-cols-2 gap-x-3 sm"><div>X <b id="xV" style="color:#fff">0 px</b></div><div>Y <b id="yV" style="color:#fff">0 px</b></div><div>MAG <b id="magV" style="color:var(--c)">0.0</b></div><div>ANG <b id="angV" style="color:var(--c)">0.0°</b></div></div>
+      <div class="relative h-20 mt-1 cy rounded overflow-hidden bg-black"><canvas id="xyC" class="w-full h-full"></canvas></div></div>
+    <div class="box"><div class="ttl"><span>CPU</span><span id="cpuMode" style="color:var(--c)">CALIBRATING</span></div>
+      <div class="flex items-center justify-between"><div id="cpuPct" class="text-2xl font-bold glow">0%</div><div class="sm text-right">CORES <b id="cpuCores" style="color:var(--c)">--</b> · LAG <b id="cpuLag" style="color:var(--c)">0 ms</b> · FPS <b id="cpuFps" style="color:var(--c)">0</b></div></div>
+      <canvas id="cpuC" class="w-full mt-1 bg-black rounded" style="height:40px;border:1px solid rgba(var(--gr),.3)"></canvas>
+      <div id="coreBars" class="grid grid-cols-4 gap-1 mt-1"></div></div>
+  </div>
+  <div class="lg:col-span-6 box flex flex-col" style="min-height:300px"><div class="ttl"><span>Planet Radar</span><span id="radarTxt">OFFLINE</span></div>
+    <div class="relative flex-1" style="min-height:260px"><div id="dormant" class="sm" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:.7">PLANET RADAR OFFLINE</div>
+      <canvas id="plC" class="absolute inset-0 w-full h-full hidden"></canvas><div id="zones" class="absolute top-1 left-1 flex flex-col gap-1 sm hidden"></div></div></div>
+  <div class="lg:col-span-3 box"><div class="ttl"><span>Link Radar</span><span id="wifiSt" style="color:var(--c)">SCANNING</span></div>
+    <canvas id="wfC" class="w-full bg-black rounded" style="height:190px;border:1px solid rgba(var(--cr),.3)"></canvas>
+    <div class="grid grid-cols-2 gap-x-2 sm mt-1"><div>LINK <b id="wfLink" style="color:var(--c)">--</b></div><div>TYPE <b id="wfType" style="color:var(--c)">--</b></div><div>DOWN <b id="wfDown" style="color:var(--c)">--</b></div><div>PING <b id="wfRtt" style="color:var(--c)">--</b></div></div>
+    <div class="sm mt-1" style="opacity:.85">Real pings to this page's server. More in Radars.</div></div>
+  <div class="lg:col-span-12 box"><div class="ttl"><span>File Scan (last scan)</span><span id="scSt" style="color:var(--c)">NOT SCANNED</span></div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3"><div id="scSum" class="sm flex flex-col gap-1"></div><div id="scBars" class="sm flex flex-col gap-1"></div><div id="scTop" class="sm flex flex-col gap-1"></div></div>
+    <div class="flex flex-wrap gap-2 mt-2"><a class="b" href="file.html" onclick="return navClick(event,'file.html')">OPEN FILE SCAN</a></div></div>
+</div></section>
+</main>
+<div id="engO" style="position:fixed;inset:0;background:#000;z-index:20000;transition:opacity .9s;overflow:hidden;color:#d0d0d0"><pre id="bt" style="position:absolute;inset:0;margin:0;padding:12px 14px;font-family:ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:15px;line-height:1.35;white-space:pre-wrap;overflow:hidden;word-break:break-word"></pre></div>
+<script src="zack.js"></script>
+<script src="boot.js"></script>
+<script src="index.js"></script>
+</body>
+</html>
