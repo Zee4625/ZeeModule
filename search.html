@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="green">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#010409"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Zack Engine · Z.Engine</title>
+<script>try{var s=JSON.parse(localStorage.getItem('zack.settings')||'{}');if(s.theme)document.documentElement.dataset.theme=s.theme;if(s.fz)document.documentElement.style.fontSize=s.fz+'px'}catch(e){}</script>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="zack.css">
+</head>
+<body data-page="search">
+<main id="app">
+<section class="win">
+<div class="wt"><b>Z.Engine</b><span class="sm" style="opacity:.85">meta-search: Wikipedia, Wikimedia, dictionary, calculator, Google with your key</span></div>
+<div class="sbar"><span class="zlogo2">Z<b>.</b>Engine</span><form id="sf" class="hform" style="flex:1;width:auto" autocomplete="off"><input id="q" placeholder="Search the web" aria-label="Search" autocomplete="off"><button class="b" type="submit">SEARCH</button></form></div>
+<div id="sug" class="sug" style="display:none"></div>
+<div id="home"><div id="hist"></div><div class="card sm" style="margin-top:.6rem"><b>How Z.Engine works</b><div>It shows live results from Wikipedia and Wikimedia Commons, a dictionary and a calculator, and live Google web results once you add a free Google Programmable Search key. Full web results open on Google, DuckDuckGo, Bing and Brave. Type a web address to open the site.</div></div></div>
+<div id="res" style="display:none"><div id="tabs" class="flex flex-wrap gap-1 mb-1"></div><div id="engs" class="sm mb-1"></div><div id="out"></div></div>
+<div class="box mt-2" id="keyBox" style="display:none"><div class="ttl"><span>Google Programmable Search key</span></div>
+ <div class="sm">1) Create a search engine that searches the entire web at programmablesearchengine.google.com and copy its Search engine ID (cx). 2) Create an API key in Google Cloud with the Custom Search API enabled. The free tier gives about 100 searches a day. Keys are saved only in this browser.</div>
+ <div class="flex flex-wrap gap-2 mt-1"><input id="kKey" placeholder="API key" style="flex:1;min-width:10rem" autocomplete="off"><input id="kCx" placeholder="Search engine ID (cx)" style="flex:1;min-width:10rem" autocomplete="off"><button class="b" id="kSave">SAVE</button><button class="b k" id="kClear">REMOVE</button></div></div></section>
+</main>
+<script src="zack.js"></script>
+<script>Zack.load(['search.js'])</script>
+</body>
+</html>
