@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="green">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#010409"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Zack Engine · Z.Eye</title>
+<script>try{var s=JSON.parse(localStorage.getItem('zack.settings')||'{}');if(s.theme)document.documentElement.dataset.theme=s.theme;if(s.fz)document.documentElement.style.fontSize=s.fz+'px'}catch(e){}</script>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="zack.css">
+<script>window.CESIUM_BASE_URL="https://cdn.jsdelivr.net/npm/cesium@1.123.1/Build/Cesium/"</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cesium@1.123.1/Build/Cesium/Widgets/widgets.css">
+</head>
+<body data-page="eye" data-secret="1">
+<main id="app">
+<div id="eyeWrap">
+ <div id="globe"></div>
+ <div id="eyeErr" class="box" style="display:none;position:absolute;left:1rem;top:1rem;z-index:9">Cesium (the 3D globe engine) could not be loaded. Z.Eye needs internet access to cdn.jsdelivr.net.</div>
+ <div id="eyeToast" class="box" style="display:none"></div>
+ <div id="eyeSide" class="box">
+  <div class="ttl"><span>Z.EYE</span><span id="eyeClock" class="sm"></span></div>
+  <div class="flex gap-2"><input id="eyeQ" placeholder="search a place or address" style="flex:1;min-width:0" autocomplete="off"><button class="b" id="eyeGo">GO</button></div>
+  <div id="eyeRes" class="sm"></div><div id="eyePre" class="flex flex-wrap gap-1 mt-1"></div>
+  <div class="flex flex-wrap gap-2 mt-1"><button class="b" id="eyeLoc">MY LOCATION</button><button class="b" id="eyeStreet">STREET VIEW</button></div>
+  <label class="sm" style="display:block;margin-top:.3rem"><input type="checkbox" id="eyeAuto" checked> auto detail: zoom in to see places, buildings and enter street mode</label>
+  <div class="ttl mt-2"><span>Layers</span></div><div id="eyeLay" class="sm"></div>
+  <div class="sm" style="opacity:.75;margin:.2rem 0">Local places (taxi ranks, stops, fuel, health, food) come from OpenStreetMap and appear when you zoom in below ~8 km.</div>
+  <div id="eyePoi" class="flex flex-wrap gap-1"></div>
+  <div class="sm" style="opacity:.75;margin-top:.3rem">Live taxi, Bolt and Uber cars are private data and do not exist as open feeds, so only taxi ranks are shown.</div>
+  <div class="ttl mt-2"><span>Satellites</span></div><select id="eyeSatG" style="width:100%"><option value="stations">Space stations (ISS ...)</option><option value="visual">100 brightest</option><option value="weather">Weather</option><option value="gps-ops">GPS</option><option value="science">Science</option><option value="starlink">Starlink (sample)</option></select>
+  <div class="ttl mt-2"><span>Map</span></div>
+  <div class="flex flex-wrap gap-2 items-center"><select id="eyeBase"><option value="dark">Dark map</option><option value="sat">Satellite</option><option value="osm">Street map</option></select><label class="sm"><input type="checkbox" id="eyeLight" checked> day / night</label><label class="sm"><input type="checkbox" id="eyeRadar"> rain radar</label></div>
+  <div class="flex gap-2 mt-1"><button class="b" id="eyeMode">2D / 3D</button><button class="b" id="eyeReset">RESET VIEW</button></div>
+  <div class="ttl mt-2"><span>Inspect zone</span></div><div class="flex gap-2 items-center"><span class="sm">Click the map. Radius</span><select id="zoneR"><option value="25">25 km</option><option value="100" selected>100 km</option><option value="300">300 km</option><option value="1000">1000 km</option></select></div>
+  <div class="ttl mt-2"><span>Radio</span><span id="radNow" class="sm" style="color:var(--c)"></span></div>
+  <div class="flex gap-2"><input id="radQ" placeholder="station, country or genre" style="flex:1;min-width:0" autocomplete="off"><button class="b" id="radGo">FIND</button></div>
+  <div class="flex gap-2 mt-1 items-center"><button class="b" id="radAll">TOP</button><button class="b" id="radRnd">RANDOM</button><button class="b" id="radStop">STOP</button><input type="range" id="radVol" min="0" max="100" value="70" style="flex:1;min-width:3rem" aria-label="Radio volume"></div>
+  <div id="radList" class="sm" style="max-height:12rem;overflow:auto;margin-top:.3rem"></div>
+  <div id="eyeSt" class="sm" style="opacity:.85;margin-top:.5rem"></div>
+  <div id="eyeProxy" class="sm" style="opacity:.7;margin-top:.2rem"></div>
+ </div>
+ <div id="eyeInfo" class="box" style="display:none"></div>
+ <div id="eyeAround" class="box" style="display:none"></div>
+ <div id="walkBox" class="box" style="display:none"><div class="sm" id="walkTxt">STREET MODE · drag to look · W A S D or arrows to walk · Shift = run · Q / E = down / up · Esc = exit</div>
+  <div class="flex flex-wrap gap-1 mt-1 items-center"><button class="b" data-w="l">◀</button><button class="b" data-w="f">▲</button><button class="b" data-w="b">▼</button><button class="b" data-w="r">▶</button><button class="b" data-w="u">UP</button><button class="b" data-w="d">DOWN</button><button class="b" id="walkExit">EXIT STREET</button></div></div>
+ <button class="b" id="eyeTog">PANEL</button>
+ <div id="eyeHud" class="sm"></div>
+</div>
+<script>setTimeout(function(){if(typeof Cesium==='undefined')document.getElementById('eyeErr').style.display='block'},9000)</script>
+</main>
+<script src="zack.js"></script>
+<script>Zack.load(['https://cdn.jsdelivr.net/npm/cesium@1.123.1/Build/Cesium/Cesium.js','https://cdn.jsdelivr.net/npm/satellite.js@5.0.0/dist/satellite.min.js','cams.js','eye.js'])</script>
+</body>
+</html>

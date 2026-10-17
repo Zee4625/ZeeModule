@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="green">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#010409"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Zack Engine · Trade View</title>
+<script>try{var s=JSON.parse(localStorage.getItem('zack.settings')||'{}');if(s.theme)document.documentElement.dataset.theme=s.theme;if(s.fz)document.documentElement.style.fontSize=s.fz+'px'}catch(e){}</script>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="zack.css">
+</head>
+<body data-page="trade" data-secret="1">
+<main id="app">
+<section class="win">
+<div class="wt"><b>Trade View</b><span class="sm" style="opacity:.85">real market data · Binance public API · not financial advice</span></div>
+<div class="tvWrap">
+  <div class="box tvList"><div class="ttl"><span>Markets</span><span id="tvCount" style="color:var(--c)"></span></div>
+    <input id="tvQ" placeholder="search a market" style="width:100%;margin-bottom:.3rem" autocomplete="off"><div id="tvRows" class="sm"></div>
+    <details class="sm" style="margin-top:.5rem"><summary style="cursor:pointer">Stocks and commodities (optional key)</summary><div class="flex gap-2 mt-1"><input id="tdKey" type="password" placeholder="Twelve Data API key" style="flex:1;min-width:0" autocomplete="off"><button class="b" id="tdSave">SAVE</button></div><div style="opacity:.8;margin-top:.3rem">With a free Twelve Data key, AAPL, NVDA, gold spot, oil and forex pairs appear in the list.</div></details></div>
+  <div class="tvMain">
+    <div class="box"><div class="tvHead"><div><b id="tvSym" class="big" style="font-size:1.3rem">BTCUSDT</b> <span id="tvName" class="sm" style="opacity:.85"></span></div><div style="text-align:right"><span id="tvPrice" class="big" style="font-size:1.3rem">--</span> <span id="tvChg" class="sm"></span></div></div>
+      <div id="tvStats" class="sm" style="opacity:.9"></div>
+      <div class="tvBar"><span id="tvTf" class="flex gap-1"></span><span class="grow"></span><label class="sm"><input type="checkbox" id="iSma" checked> SMA20</label> <label class="sm"><input type="checkbox" id="iEma" checked> EMA50</label> <label class="sm"><input type="checkbox" id="iVol" checked> VOL</label></div>
+      <canvas id="tvC" style="display:block;width:100%;height:46vh;min-height:240px;background:#000;border:1px solid rgba(var(--gr),.3);touch-action:none"></canvas><div id="tvTip" class="sm" style="min-height:1.3rem;opacity:.9"></div></div>
+    <div class="tvLow"><div class="box"><div class="ttl"><span>Recent trades</span><span id="tvLive" style="color:var(--c)">--</span></div><div id="tvTape" class="sm"></div></div><div class="box"><div class="ttl"><span>Order book</span></div><div id="tvBook" class="sm"></div></div></div>
+  </div>
+</div></section>
+</main>
+<script src="zack.js"></script>
+<script>Zack.load(['trade.js'])</script>
+</body>
+</html>
